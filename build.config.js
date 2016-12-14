@@ -20,7 +20,9 @@ module.exports = {
    * app's unit tests.
    */
   app_files: {
-    js: [ 'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' ],
+    js: [ 
+        'src/**/*.js', '!src/**/*.spec.js', '!src/assets/**/*.js' 
+    ],
     jsunit: [ 'src/**/*.spec.js' ],
     
     coffee: [ 'src/**/*.coffee', '!src/**/*.spec.coffee' ],
@@ -66,11 +68,20 @@ module.exports = {
       'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
-      'vendor/angular-ui-utils/modules/route/route.js'
+      'vendor/angular-ui-utils/modules/route/route.js',
+      'vendor/jquery/dist/jquery.min.js',
+      'vendor/bootstrap/dist/js/bootstrap.min.js',
+      'vendor/sigma/build/sigma.min.js',
+      'vendor/underscore/underscore-min.js'
     ],
     css: [
     ],
     assets: [
+    ],
+    fonts: [
+        'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf',
+        'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2',
+        'vendor/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
     ]
   },
 };

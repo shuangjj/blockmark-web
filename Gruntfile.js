@@ -119,6 +119,17 @@ module.exports = function ( grunt ) {
           }
        ]   
       },
+      build_vendor_fonts: {
+        files: [
+          { 
+            src: [ '<%= vendor_files.fonts %>' ],
+            dest: '<%= build_dir %>/assets/fonts',
+            cwd: '.',
+            expand: true,
+            flatten: true
+          }
+       ]   
+      },
       build_appjs: {
         files: [
           {
@@ -149,6 +160,8 @@ module.exports = function ( grunt ) {
           }
         ]
       },
+      
+
       compile_assets: {
         files: [
           {
@@ -177,7 +190,6 @@ module.exports = function ( grunt ) {
        */
       build_css: {
         src: [
-          '<%= vendor_files.css %>',
           '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
         ],
         dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
@@ -569,7 +581,8 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'build', [
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'concat:build_css', 
+    'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_fonts',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
     'karma:continuous' 
   ]);
@@ -607,7 +620,8 @@ module.exports = function ( grunt ) {
    * compilation.
    */
   grunt.registerMultiTask( 'index', 'Process index.html template', function () {
-    var dirRE = new RegExp( '^('+grunt.config('build_dir')+'|'+grunt.config('compile_dir')+')\/', 'g' );
+    var dirRE = new RegExp( '^('+grunt.config('build_dir')+'|'+
+                grunt.config('compile_dir')+')\/', 'g' );
     var jsFiles = filterForJS( this.filesSrc ).map( function ( file ) {
       return file.replace( dirRE, '' );
     });

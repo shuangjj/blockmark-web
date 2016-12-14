@@ -1,121 +1,172 @@
 <!DOCTYPE html>
-<html ng-app="ngBoilerplate" ng-controller="AppCtrl">
+<html ng-app="blockmarkApp" ng-controller="BlockmarkCtrl as blockmCtrl">
   <head>
-    <title ng-bind="pageTitle"></title>
-
-    <!-- social media tags -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@joshdmiller">
-    <meta name="twitter:title" content="ngBoilerplate">
-    <meta name="twitter:description" content="Non-Trivial AngularJS Made Easy: Everything you need to kickstart AngularJS projects: a best-practice directory structure, an intelligent build system, and the best web design libraries around.">
-    <meta name="twitter:creator" content="@joshdmiller">
-    <meta name="twitter:image:src" content="https://a248.e.akamai.net/assets.github.com/images/modules/logos_page/Octocat.png?1366128846">
-    <meta property="og:title" content="ngBoilerplate" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://bit.ly/ngBoilerplate" />
-    <meta property="og:image" content="https://a248.e.akamai.net/assets.github.com/images/modules/logos_page/Octocat.png?1366128846" />
-    <meta property="og:description" content="Non-Trivial AngularJS Made Easy: Everything you need to kickstart AngularJS projects: a best-practice directory structure, an intelligent build system, and the best web design libraries around.">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <title>Blockmark</title>
+    <link rel="shortcut icon" href="assets/favicon.ico">
     <!-- font awesome from BootstrapCDN -->
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
-    <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
-    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
+    <!-- compiled CSS <% styles.forEach( function ( file ) { %>
+    <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>-->
+    <!-- compiled JavaScript <% scripts.forEach( function ( file ) { %>
+    <script type="text/javascript" src="<%= file %>"></script><% }); %>-->
 
-    <!-- compiled JavaScript --><% scripts.forEach( function ( file ) { %>
-    <script type="text/javascript" src="<%= file %>"></script><% }); %>
-
-    <!-- it's stupid to have to load it here, but this is for the +1 button -->
-    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
-      { "parsetags": "explicit" }
-    </script>
+		<!-- compiled CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/blockmark-0.1.1.css" />
+    <!-- compiled JavaScript -->
+    <script type="text/javascript" src="vendor/angular/angular.js"></script>
+    <script type="text/javascript" src="vendor/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js"></script>
+    <script type="text/javascript" src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+    <script type="text/javascript" src="vendor/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="vendor/sigma/build/sigma.min.js"></script>
+    <script type="text/javascript" src="vendor/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="src/common/sigma/sigma-module.js"></script>
+    <script type="text/javascript" src="src/common/sigma/sigma-directive.js"></script>
+    <script type="text/javascript" src="src/common/sigma/defaultSigmaConfig-service.js"></script>
+    <script type="text/javascript" src="src/common/sigma/link-service.js"></script>
+    <script type="text/javascript" src="src/app/app.js"></script>
+    <script type="text/javascript" src="src/app/graph/graph.js"></script>
+    <script type="text/javascript" src="src/app/graph/blockmark-cleanup-service.js"></script>
+    <script type="text/javascript" src="src/app/graph/sigma-locate-service.js"></script>
+    <script type="text/javascript" src="src/app/graph/sigma-lifecycle-service.js"></script>
+    <script type="text/javascript" src="templates-common.js"></script>
+    <script type="text/javascript" src="templates-app.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <div class="navbar navbar-default">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
-            ng-click="menuCollapsed = ! menuCollapsed">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <div class="navbar-brand">
-            ngbp
-            <small>
-              <a href="http://github.com/ngbp/ngbp/blob/v<%= version %>-release/CHANGELOG.md">
-                v<%= version %>
-              </a>
-            </small>
+
+  <body id="home-pg" >
+    <div id="page-container">
+      <div id='header'>
+      </div>
+      <div id="main-container" class="center">
+        <!-- search box -->
+				<div id="search-box" class="row">
+					<div class="col-md-12">
+						<div class="input-group" id="adv-search">
+							<input type="text" class="form-control" placeholder="Ask blockmark" ng-model="blockmCtrl.search_term"/>
+							<div class="input-group-btn">
+								<div class="btn-group" role="group">
+									<div class="dropdown dropdown-lg">
+										<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+										<div class="dropdown-menu dropdown-menu-right" role="menu">
+											<form class="form-horizontal" role="form">
+												<div class="form-group">
+													<label for="filter">Filter by</label>
+													<select class="form-control">
+														<option value="0" selected>All Transactions</option>
+														<option value="1">Suspecious</option>
+														<option value="2">Top 10 inputs</option>
+														<option value="3">Top 100 inputs</option>
+														<option value="4">Highest frequency</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label for="contain">Mark</label>
+													<input class="form-control" type="text" />
+												</div>
+												<div class="form-group">
+													<label for="contain">Location</label>
+													<input class="form-control" type="text" />
+												</div>
+												<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+											</form>
+										</div>
+									</div>
+									<button type="button" class="btn btn-primary" ng-click="blockmCtrl.search()">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                  </button>
+								</div>
+							</div>
+						</div> <!-- adv-search -->
+					</div>
+				</div>
+
+        <div id="search-results" ng-show="blockmCtrl.results">
+          <div ng-switch on="blockmCtrl.results['type']">
+            <!-- Result type block -->
+            <div ng-switch-when="block">
+              <hgroup class="mb20">
+              <h2 class="lead">It's <strong class="text-danger">block</strong>: <span class="text-hash">{{blockmCtrl.results['hash']}}</span></h2>               
+              </hgroup>
+
+              <article class="search-result row">
+                <div class="col-xs-12 col-sm-12 col-md-2">
+                  <ul class="meta-search">
+                    <li><i class="glyphicon glyphicon-calendar"></i> <span ng-bind="blockmCtrl.results['date']+'000'| date:'mediumDate'"></span></li>
+                    <li><i class="glyphicon glyphicon-time"></i> <span ng-bind="blockmCtrl.results['date']+'000'| date:'mediumTime'"></span></li>
+                    <li><i class="glyphicon glyphicon-tags"></i> <span>Block</span></li>
+                  </ul>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+                  <p class="blue-lines">Blockmark Insights</p>
+                  <span class="plus"><a href="#/graph" title="View Chart"><i class="glyphicon glyphicon-stats"></i></a></span>
+                </div>
+              </article>
+
+              <!-- TODO: Show transaction graph --> 
+              <div ui-view="graph" style="width: 100%; height: 100%;"></div>
+            </div>  
+            <!-- Result type account -->
+            <div ng-switch-when="account">
+              <hgroup class="mb20">
+                <h2 class="lead">It's <strong class="text-danger">account</strong>: <span class="text-hash">{{blockmCtrl.results['address']}}</span></h2>               
+              </hgroup>
+
+              <article class="search-result row">
+                <div class="col-xs-12 col-sm-12 col-md-2">
+                  <ul class="meta-search">
+                    <li><i class="glyphicon glyphicon-tags"></i> <span>Account</span></li>
+                  </ul>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+                  <p class="blue-lines">Blockmark Insights</p>
+                  <span class="plus"><a href="#/graph" title="View Chart"><i class="glyphicon glyphicon-stats"></i></a></span>
+                </div>
+              </article>
+
+            </div>
+
+            <div ng-switch-when="blocks">
+              hello blocks!
+            </div>
+           
+            <div ng-switch-when="transaction">
+              <hgroup class="mb20">
+              <h2 class="lead">It's <strong class="text-danger">transaction</strong>: <span class="text-hash">{{blockmCtrl.results['txid']}}</span></h2>               
+              </hgroup>
+
+              <article class="search-result row">
+                <div class="col-xs-12 col-sm-12 col-md-2">
+                  <ul class="meta-search">
+                    <li><i class="glyphicon glyphicon-tags"></i> <span>Transaction</span></li>
+                    <li>Input sum <span>{{blockmCtrl.results['input_sum']}}</span></li>
+                  </ul>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-7 excerpet">
+                  <p class="blue-lines">Blockmark Insights</p>
+                  <span class="plus"><a href="#/graph" title="View Chart"><i class="glyphicon glyphicon-stats"></i></a></span>
+                </div>
+              </article>
+
+              <!-- TODO: Show transaction graph --> 
+              <div ui-view="graph" style="width: 100%; height: 100%;"></div>
+            </div> 
+
+            <div ng-switch-default>
+              Oh, {{blockmCtrl.results['type']}}
+            </div>
           </div>
-        </div>
-        <div class="collapse navbar-collapse" collapse="menuCollapsed">
-          <ul class="nav navbar-nav">
-            <li ui-sref-active="active">
-              <a href ui-sref="home">
-                <i class="fa fa-home"></i>
-                Home
-              </a>
-            </li>
-            <li ui-sref-active="active">
-              <a href ui-sref="about">
-                <i class="fa fa-info-circle"></i>
-                What is it?
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/ngbp/ngbp#readme">
-                <i class="fa fa-book"></i>
-                Read the Docs
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/ngbp/ngbp">
-                <i class="fa fa-github-alt"></i>
-                Github
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/ngbp/ngbp/issues">
-                <i class="fa fa-comments"></i>
-                Support
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
 
-    <div class="container" ui-view="main"></div>
-
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-inner">
-          <ul class="social">
-            <li><a target="_blank" href="http://gplus.to/joshdmiller"><i class="fa fa-google-plus-sign"></i></a></li>
-            <li><a target="_blank" href="http://twitter.com/joshdmiller"><i class="fa fa-twitter-sign"></i></a></li>
-            <li><a target="_blank" href="http://linkedin.com/in/joshdmiller"><i class="fa fa-linkedin-sign"></i></a></li>
-            <li><a target="_blank" href="http://github.com/ngbp/ngbp"><i class="fa fa-github-sign"></i></a></li>
-          </ul>
-          
-
-          <p>
-            (c) 2013 <a href="http://www.joshdavidmiller.com">Josh David Miller</a>. 
-            <a href="http://github.com/ngbp/ngbp/fork_select">Fork this</a>
-            to kickstart your next project.
-            <br />
-            ngbp is based on
-            <a href="http://www.angularjs.org">AngularJS</a>,
-            <a href="http://getbootstrap.com">Bootstrap</a>, 
-            <a href="http://angular-ui.github.com/bootstrap">UI Bootstrap</a>,
-            and 
-            <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>.        
-          </p>
         </div>
-      </div>
-    </footer>
+        <!-- error display -->
+        <div id="" ng-show="blockmCtrl.error_msg">
+          <div>
+            <span ng-bind="blockmCtrl.error_msg" style='color: red'></span>
+          </div> 
+        </div>
+      </div> <!-- main container -->
+      
+    </div>   
   </body>
 </html>

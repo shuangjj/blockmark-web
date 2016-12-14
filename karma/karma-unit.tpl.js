@@ -11,6 +11,16 @@ module.exports = function ( karma ) {
     files: [
       <% scripts.forEach( function ( file ) { %>'<%= file %>',
       <% }); %>
+      'src/common/sigma/sigma-module.js',
+      'src/common/sigma/sigma-directive.js',
+      'src/common/sigma/defaultSigmaConfig-service.js',
+      'src/common/sigma/link-service.js',
+      'src/app/app.js',
+      'src/app/graph/graph.js',
+      'src/app/graph/blockmark-cleanup-service.js',
+      'src/app/graph/sigma-locate-service.js',
+      'src/app/graph/sigma-lifecycle-service.js',
+
       'src/**/*.js',
       'src/**/*.coffee',
     ],
@@ -18,7 +28,7 @@ module.exports = function ( karma ) {
       'src/assets/**/*.js'
     ],
     frameworks: [ 'jasmine' ],
-    plugins: [ 'karma-jasmine', 'karma-firefox-launcher', 'karma-coffee-preprocessor' ],
+    plugins: [ 'karma-jasmine', 'karma-chrome-launcher', 'karma-coffee-preprocessor' ],
     preprocessors: {
       '**/*.coffee': 'coffee',
     },
@@ -55,7 +65,7 @@ module.exports = function ( karma ) {
      * the aesthetic advantage of not launching a browser every time you save.
      */
     browsers: [
-      'Firefox'
+      'Chrome'
     ]
   });
 };

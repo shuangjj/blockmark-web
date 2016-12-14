@@ -1,25 +1,34 @@
-angular.module( 'ngBoilerplate', [
-  'templates-app',
-  'templates-common',
-  'ngBoilerplate.home',
-  'ngBoilerplate.about',
-  'ui.router'
+angular.module('blockmarkApp', [ 
+        'templates-app',
+        'templates-common',
+        'blockmarkApp.graph',
+        'ui.router'
 ])
 
-.config( function myAppConfig ( $stateProvider, $urlRouterProvider ) {
-  $urlRouterProvider.otherwise( '/home' );
+.config(function ($stateProvider, $urlRouterProvider) {
 })
 
-.run( function run () {
-})
+.controller('BlockmarkCtrl', function($http) {
+    var self = this;
+    self.results = null;
+    self.error_msg = null;
 
-.controller( 'AppCtrl', function AppCtrl ( $scope, $location ) {
-  $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
-    if ( angular.isDefined( toState.data.pageTitle ) ) {
-      $scope.pageTitle = toState.data.pageTitle + ' | ngBoilerplate' ;
-    }
-  });
+	
+    self.search = function() {
+        
+        $http.get('http://localhost:5000/search/'+self.search_term).then( 
+            function(response) {
+                self.error_msg = null;
+                self.results = response.data;
+            }, function(error_resp) {
+                self.results = null;
+                self.error_msg = error_resp.data.message;
+                console.error('Error searching block info');
+            }
+        );
+        
+    };
+
 })
 
 ;
-
